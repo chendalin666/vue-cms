@@ -22,10 +22,10 @@ export default {
         async getlunbo(){
             // 解构赋值获取数据
             const {data} = await this.$http.get('/api/getlunbo')
-            // console.log(data)
+            console.log(data)
             // 如果data的状态码为0说明请求数据成功，然后将data的message数据传递给给this.lunbotu
             if (data.status === 0) this.lunbotu = data.message
-            // console.log(this.lunbotu)
+            console.log(this.lunbotu)
         }
     },
     created() {// 页面加载时执行
