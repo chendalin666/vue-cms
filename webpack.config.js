@@ -7,18 +7,25 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 // 引入vue-loader的插件
 const { VueLoaderPlugin } = require('vue-loader')
-
+// 引入压缩css的插件
+const CssMinimizerWebpackPlugin = require('css-minimizer-webpack-plugin')
 module.exports = {
     // 单入口的配置
-    entry: './src/main.js',
-
+    entry: {
+        // main:["babel-polyfill","./src/main.js"]
+        main:"./src/main.js"
+    },
+    // 通过mode指定打包的模式
+    mode: 'production',//生产模式
+    // mode:'development',//开发模式
+    
     // 输出的配置
     output: {
         // path表示打包之后所在的位置
         // __dirname表示这个文件所在目录的绝对路径
         path: path.resolve(__dirname, 'dist'),
         // 通过filename指定打包之后的文件名
-        // filename: '[name].js'
+        filename: '[name].js'
     },
     // loader的配置，处理非js资源，如css,img,less,sass
     module: {
@@ -29,7 +36,19 @@ module.exports = {
                 // MiniCssExtractPlugin.loader将css打包成单独的文件，并以link的形式加载
                 use: [
                     MiniCssExtractPlugin.loader,
-                    'css-loader'
+                    'css-loader',
+                    'postcss-loader'
+                ]
+            },
+            {
+                // test：用正则检查以.scss结尾的文件
+                test: /\.scss$/,
+                // MiniCssExtractPlugin.loader将css打包成单独的文件，并以link的形式加载
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    'css-loader',
+                    'sass-loader',
+                    'postcss-loader'
                 ]
             },
             {
@@ -37,6 +56,13 @@ module.exports = {
                 test:/\.ttf|woff|woff2|eot|svg$/,
                 use:'url-loader'
             },
+            // {
+            //     // 处理js兼容性
+            //     test:/\.js$/,
+            //     use:'babel-loader',
+            //     // exclude:/node_modules/
+            //     include: [path.resolve('src'), path.resolve('test')]
+            // },
             {
                 // 匹配以.vue结尾的文件
                 test: /\.vue$/,
@@ -64,11 +90,11 @@ module.exports = {
         // 将css抽离为单独的.css文件
         new MiniCssExtractPlugin({
         }),
+        new CssMinimizerWebpackPlugin({
+
+        }),
         // vue-loader的插件
         new VueLoaderPlugin({
         })
-    ],
-    // 通过mode指定打包的模式
-    mode: 'production'//生产模式
-    // mode:'development'//开发模式
+    ]
 }
