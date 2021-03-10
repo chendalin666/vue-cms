@@ -6,6 +6,7 @@ import HomeContainer from './components/tabbars/HomeContainer.vue'
 import MemberContainer from './components/tabbars/MemberContainer.vue'
 import ShopcarContainer from './components/tabbars/ShopcarContainer.vue'
 import SearchContainer from './components/tabbars/SearchContainer.vue'
+import NewsList from './components/newslist/NewsList.vue'
 
 const router = new VueRouter({
     routes:[
@@ -13,7 +14,8 @@ const router = new VueRouter({
         {path:'/home',component:HomeContainer},
         {path:'/member',component:MemberContainer},
         {path:'/shopcar',component:ShopcarContainer},
-        {path:'/search',component:SearchContainer}
+        {path:'/search',component:SearchContainer},
+        {path:'/home/newslist',component:NewsList}
     ],
     // 设置被选中的路由链接的样式
     linkActiveClass:'mui-active'

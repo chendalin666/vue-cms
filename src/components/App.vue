@@ -9,7 +9,11 @@
             </router-link>
             <mt-button icon="more" slot="right"></mt-button>
         </mt-header>
-        <router-view></router-view>
+        <transition>
+            <!-- 路由容器 -->
+            <router-view></router-view>
+        </transition>
+        
 
         <!-- 底部区域 -->
         <nav class="mui-bar mui-bar-tab">
@@ -47,5 +51,26 @@ export default {
 <style lang="css" scoped>
     .app-container{
         padding-top:40px;
+        /* 当切换组件的时候，动画效果会使页面宽度溢出，出现底部滚动条，用overflow可以解决溢出问题 */
+        overflow: hidden;
+    }
+    /* 即将进入的组件的位置 */
+    .v-enter{
+        opacity: 0;
+        /* 距离x轴正方向的距离为宽度的100% */
+        transform: translateX(100%);
+    }
+    /* 离开后的位置 */
+    .v-leave-to{
+        opacity: 0;
+        /* x轴的负方向 */
+        transform: translateX(-100%);
+        /* 使元素离开时浮动起来 */
+        position: absolute;
+    }
+    /* 进入和离开的时的样式 */
+    .v-enter-active,
+    .v-leave.active{
+        transition: all .3s ease;
     }
 </style>

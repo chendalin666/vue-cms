@@ -9,23 +9,26 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const { VueLoaderPlugin } = require('vue-loader')
 // 引入压缩css的插件
 const CssMinimizerWebpackPlugin = require('css-minimizer-webpack-plugin')
+// const HappyPack = require('happypack')
+// const os = require('os')
+// const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length })
 module.exports = {
     // 单入口的配置
     entry: {
         // main:["babel-polyfill","./src/main.js"]
-        main:"./src/main.js"
+        main: "./src/main.js"
     },
     // 通过mode指定打包的模式
     mode: 'production',//生产模式
     // mode:'development',//开发模式
-    
+
     // 输出的配置
     output: {
         // path表示打包之后所在的位置
         // __dirname表示这个文件所在目录的绝对路径
         path: path.resolve(__dirname, 'dist'),
         // 通过filename指定打包之后的文件名
-        filename: '[name].js'
+        filename: '[name].js',
     },
     // loader的配置，处理非js资源，如css,img,less,sass
     module: {
@@ -47,14 +50,43 @@ module.exports = {
                 use: [
                     MiniCssExtractPlugin.loader,
                     'css-loader',
-                    'sass-loader',
+                    'fast-sass-loader',
                     'postcss-loader'
                 ]
             },
+            // {
+            //     test: /\.jsx?$/,
+            //     // 编译js或jsx文件，使用babel-loader转换es6为es5
+            //     exclude: /node_modules/,
+            //     use: 'HappyPack/loader?id=js'
+            // },
             {
                 // 处理字体图标
-                test:/\.ttf|woff|woff2|eot|svg$/,
-                use:'url-loader'
+                test: /\.(ttf|woff|woff2|eot|svg)$/,
+                use: ['url-loader']
+            },
+            {
+                test: /\.(jpg|png|gif|bmp)$/,
+                use: [{
+                    loader: 'url-loader',
+                    options: {
+                        // publicPath: './src/images',
+                        outputPath: 'images/',
+                        limit: 1024 * 5,
+                        name: '[hash:3]-[name].[ext]',
+                        esModule: false
+                    }
+                }]
+                // use:'url-loader?name=[hash:3]-[name].[ext]'
+            },
+            {
+                // 匹配以.vue结尾的文件
+                test: /\.vue$/,
+                use: ['vue-loader']
+            },
+            {
+                test: /\.html$/,
+                use: ['html-loader']
             },
             // {
             //     // 处理js兼容性
@@ -63,11 +95,7 @@ module.exports = {
             //     // exclude:/node_modules/
             //     include: [path.resolve('src'), path.resolve('test')]
             // },
-            {
-                // 匹配以.vue结尾的文件
-                test: /\.vue$/,
-                use: 'vue-loader'
-            }
+            
         ]
 
     },
@@ -95,6 +123,15 @@ module.exports = {
         }),
         // vue-loader的插件
         new VueLoaderPlugin({
-        })
+        }),
+        // new HappyPack({
+        //     id: 'js',
+        //     loaders: [{
+        //         loader: 'babel-loader',
+        //         options: {
+        //             cacheDirectory: true
+        //         }
+        //     }]
+        // })
     ]
 }

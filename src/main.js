@@ -13,10 +13,10 @@ Vue.use(VueRouter)
 import router from './router.js'
 // 导入mint-ui
 import MintUI from 'mint-ui'
-import 'mint-ui/lib/style.css'
+import 'mint-ui/lib/style.min.css'
 Vue.use(MintUI)
 // 导入mui
-import '../lib/mui/css/mui.css'
+import '../lib/mui/css/mui.min.css'
 import '../lib/mui/css/icons-extra.css'
 // 导入App根组件
 import App from './components/App.vue'
