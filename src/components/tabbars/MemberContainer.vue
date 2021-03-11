@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>member</h1>
+        <h1>会员页</h1>
     </div>
 </template>
 

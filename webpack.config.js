@@ -9,6 +9,8 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const { VueLoaderPlugin } = require('vue-loader')
 // 引入压缩css的插件
 const CssMinimizerWebpackPlugin = require('css-minimizer-webpack-plugin')
+// 引入清除dist目录的插件
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 // const HappyPack = require('happypack')
 // const os = require('os')
 // const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length })
@@ -38,7 +40,8 @@ module.exports = {
                 test: /\.css$/,
                 // MiniCssExtractPlugin.loader将css打包成单独的文件，并以link的形式加载
                 use: [
-                    MiniCssExtractPlugin.loader,
+                    // MiniCssExtractPlugin.loader,
+                    'style-loader',
                     'css-loader',
                     'postcss-loader'
                 ]
@@ -48,7 +51,8 @@ module.exports = {
                 test: /\.scss$/,
                 // MiniCssExtractPlugin.loader将css打包成单独的文件，并以link的形式加载
                 use: [
-                    MiniCssExtractPlugin.loader,
+                    // MiniCssExtractPlugin.loader,
+                    'style-loader',
                     'css-loader',
                     'fast-sass-loader',
                     'postcss-loader'
@@ -88,19 +92,61 @@ module.exports = {
                 test: /\.html$/,
                 use: ['html-loader']
             },
-            // {
-            //     // 处理js兼容性
-            //     test:/\.js$/,
-            //     use:'babel-loader',
-            //     // exclude:/node_modules/
-            //     include: [path.resolve('src'), path.resolve('test')]
-            // },
-            
+            {
+                // 检查js语法
+                test:/\.js$/,
+                exclude:/node_modules/,
+                use:[
+                    
+                    {
+                        loader:'babel-loader',
+                        options: {
+                            // 预设：指示babel做怎么样的兼容性处理，普通简单转换处理。
+                            // presets: [
+                            //     '@babel/preset-env'
+                            // ]
+                            // 按需加载，上面注释。js中注释 import
+                            presets: [
+                                [
+                                    '@babel/preset-env',
+                                    {
+                                        // 按需加载
+                                        useBuiltIns: 'usage',
+                                        // 制定 core-js的版本
+                                        corejs: {
+                                            version: 2
+                                        },
+                                        // 指定兼容性做到哪个版本的浏览器
+                                        targets: {
+                                            chrome: '60',
+                                            firefox: '60',
+                                            ie: '8',
+                                            safari: '10',
+                                            edge: '17'
+                                        }
+                                    }
+                                ]
+                            ]
+                        }
+                    },
+                    {
+                        loader:'eslint-loader',
+                        
+                        options:{
+                            fix:true// 自动修改错误语法
+                        }
+                    },
+                ]
+            }
         ]
 
     },
     // plugins插件的配置
     plugins: [
+        // 清除dist目录
+        new CleanWebpackPlugin({
+            cleanOnceBeforeBuildPatterns: [path.resolve(__dirname, './dist')]
+        }),
         // 不指定template的话默认生成一个引入了资源的空html
         new HtmlWebpackPlugin({
             // 生成./src/index.html并且自动引入所有外部资源
@@ -124,6 +170,7 @@ module.exports = {
         // vue-loader的插件
         new VueLoaderPlugin({
         }),
+        
         // new HappyPack({
         //     id: 'js',
         //     loaders: [{
@@ -133,5 +180,13 @@ module.exports = {
         //         }
         //     }]
         // })
-    ]
+    ],
+    target:'web',
+    devServer:{
+        port:3001,
+        // 启用gzip压缩
+        compress:true,
+        open:true,
+        hot:true
+    }
 }

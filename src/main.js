@@ -1,37 +1,27 @@
 // 导入vue
-import Vue from 'vue'
-// 导入axios
-import axios from 'axios'
-// 把axios挂载到vue的$http原型对象上,可以通过this.$http调用axios的方法
-Vue.prototype.$http = axios.create({
-    // 通过axios.create的baseURL设置请求的根路径
-    baseURL:'http://www.liulongbin.top:3005'
-})
+import Vue from 'vue';
+// 导入全局配置
+import './globalConfig';
 // 导入vue-router
-import VueRouter from 'vue-router'
-Vue.use(VueRouter)
-import router from './router.js'
-// 导入mint-ui
-import MintUI from 'mint-ui'
-import 'mint-ui/lib/style.min.css'
-Vue.use(MintUI)
-// 导入mui
-import '../lib/mui/css/mui.min.css'
-import '../lib/mui/css/icons-extra.css'
+import VueRouter from 'vue-router';
+// 导入路由模块
+import router from './router';
 // 导入App根组件
-import App from './components/App.vue'
+import App from './components/App.vue';
 
-// 创建vue实例
+Vue.use(VueRouter);
+// import '@babel/polyfill';
+
+// 创建vue实例(eslint-disable-next-line意思是在eslint检查语法时下一行排除)
+// eslint-disable-next-line
 const vm = new Vue({
-    el:'#app',
-    data:{
-
-    },
-    methods:{
-        
-    },
-    // 用render渲染App根组件
-    render:c=> c(App),
-    // 挂载路由
-    router
-})
+  el: '#app',
+  data: {},
+  methods: {},
+  // 用render渲染App根组件
+  render: function render(c) {
+    return c(App);
+  },
+  // 挂载路由
+  router,
+});

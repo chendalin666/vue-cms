@@ -1,8 +1,12 @@
 {
-  "presets": ["@babel/preset-react", "@babel/preset-env", "babel-preset-mobx"],
+  "presets": [
+    "@babel/preset-react",
+    "@babel/preset-env",
+    "babel-preset-mobx"
+  ],
   "plugins": [
     "@babel/plugin-transform-runtime",
     "@babel/plugin-proposal-object-rest-spread",
-    "transform-remove-strict-mode" // 去除严格约束时使用
+    "transform-remove-strict-mode"
   ]
 }

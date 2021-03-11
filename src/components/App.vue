@@ -13,8 +13,6 @@
             <!-- 路由容器 -->
             <router-view></router-view>
         </transition>
-        
-
         <!-- 底部区域 -->
         <nav class="mui-bar mui-bar-tab">
 			<router-link to="/home" class="mui-tab-item">
@@ -50,7 +48,7 @@ export default {
 
 <style lang="css" scoped>
     .app-container{
-        padding-top:40px;
+        padding:40px 0 50px 0;
         /* 当切换组件的时候，动画效果会使页面宽度溢出，出现底部滚动条，用overflow可以解决溢出问题 */
         overflow: hidden;
     }
