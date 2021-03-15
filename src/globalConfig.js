@@ -13,6 +13,7 @@ import './filters';
 
 // 导入axios
 import axios from 'axios';
+
 // 把axios挂载到vue的$http原型对象上,可以通过this.$http调用axios的方法
 Vue.prototype.$http = axios.create({
   // 通过axios.create的baseURL设置请求的根路径
