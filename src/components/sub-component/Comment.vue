@@ -53,9 +53,12 @@
                 this.page++
                 this.getCommentByPage()
             },
-            sendmsg(){//发表评论
+            async sendmsg(){//发表评论
                 // 判断评论是否为空
                 if(this.msg.trim().length <= 0) Toast('评论不能为空')
+                const {data} = await this.$http.post('/api/postcomment/'+this.newsid,{ content:this.msg.trim()})
+                console.log(data);
+                if(data.status === 0 ) Toast(data.message);this.msg = '';this.cmtlist = [];this.getCommentByPage()
             }
         },
         created() {
